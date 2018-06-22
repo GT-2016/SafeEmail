@@ -6,6 +6,7 @@ Created at 2018.06.21
 # from selenium.webdriver import ActionChains
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class Base(object):
     """Base Class"""
@@ -47,6 +48,10 @@ class Base(object):
         else:
             ele[n].click()
 
+    def click_n(self,ele,n=0):
+        """have found ele"""
+        ele[n].click()
+
     def sendKeys(self, args, text):
         # 向某个找到的元素发送文本
         ele = self.findElement(args)
@@ -73,3 +78,32 @@ class Base(object):
         # 判断alert框是否存在
         alert = WebDriverWait(self.driver, self.timeout, self.poll).until(EC.alert_is_present())
         return alert
+
+    def is_find_element(self, args):
+        """whether find that element"""
+        try:
+            ele = self.findElement(args)
+            return True
+        except Exception as e:
+            return False
+
+    def get_elements_num(self, args):
+        try:
+            eles = self.findElements(args)
+            return len(eles)
+        except Exception as e:
+            return False
+
+    def tap_position(self, x, y):
+        width = self.driver.get_window_size()['width']
+        print("width:",width)
+        height = self.driver.get_window_size()['height']
+        print("height",height)
+        self.driver.tap([x, y])
+
+    def scroll(self):
+        self.driver.scroll([75, 1024], [75, 0], 800)
+
+    def logout(self):
+        "logout"
+        self.driver.quit()
