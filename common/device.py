@@ -16,13 +16,13 @@ class DeviceConfig():
         """
         self.device_caps = {}
         self.device_caps["platformName"] = "Android"
-        self.device_caps["platformVersion"] = "4.4.2"
+        self.device_caps["platformVersion"] = "5.0.1"
         self.device_caps["deviceName"] = self.getDeviceName()[0]
         self.device_caps["appPackage"] = "com.qtec.safemail2"
         self.device_caps["appActivity"] = ".ui.activities.LaunchActivity"
         self.device_caps["unicodeKeyboard"] = True
         self.device_caps["resetKeyboard"] = True
-        self.device_caps["automationName"] = "Uiautomator2"
+        self.device_caps["automationName"] = "uiautomator2"
 
     def getDeviceName(self):
         cmd = "adb devices"
