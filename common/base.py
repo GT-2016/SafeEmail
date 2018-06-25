@@ -104,6 +104,15 @@ class Base(object):
     def scroll(self):
         self.driver.scroll([75, 1024], [75, 0], 800)
 
+    def get_toast(self, contain):
+        """find toast by context"""
+        toast = ("xpath", ".//[contains(@text,'%s')]"%contain)
+        try:
+            t = WebDriverWait(self.driver, self.timeout, self.poll).until(EC.presence_of_element_located(toast))
+            return t
+        except Exception as e:
+            return False
+
     def logout(self):
         "logout"
         self.driver.quit()

@@ -6,7 +6,7 @@ Created on 2018.6.21
 import os
 from SafeEmail.common.base import Base
 from SafeEmail.common.device import DeviceConfig
-from SafeEmail.conf.element import LoginEle
+from SafeEmail.data.element import LoginEle
 from SafeEmail.log.log import Logger
 
 class Login(Base, LoginEle):

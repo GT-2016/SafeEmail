@@ -14,7 +14,7 @@ class Logger(object):
     def __init__(self, title_name):
         title = "logger for safeEmail Project"
         day = time.strftime("%Y%m%d%H", time.localtime(time.time()))
-        filepath = os.getcwd()
+        filepath = os.path.dirname(__file__)
         files = os.path.join(filepath, day+'.log')
         self.formater = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.logger = logging.Logger(title_name)  # title

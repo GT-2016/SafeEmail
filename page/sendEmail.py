@@ -6,8 +6,8 @@ function: send emails
 import os,time
 from SafeEmail.page.login import Login
 from SafeEmail.common.base import Base
-from SafeEmail.conf.element import Email
-from SafeEmail.conf.element import LoginEle
+from SafeEmail.data.element import Email
+from SafeEmail.data.element import LoginEle
 from SafeEmail.log.log import Logger
 class SendEmail(Base,Email):
     """firstly to login"""
