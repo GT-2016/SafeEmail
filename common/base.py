@@ -13,7 +13,7 @@ class Base(object):
     def __init__(self, driver):
         "init config"
         self.driver = driver
-        self.timeout = 30
+        self.timeout = 90
         self.poll = 0.5
 
     def findElement(self, args):
@@ -29,8 +29,12 @@ class Base(object):
         #         """
 
         # 查找某个元素
-        ele = WebDriverWait(self.driver, self.timeout, self.poll).until(lambda x: x.find_element(*args))
-        return ele
+        try:
+            ele = WebDriverWait(self.driver, self.timeout, self.poll).until(lambda x: x.find_element(*args))
+            return ele
+        except Exception as e:
+            print("Faile to getElement %s"%e)
+            return False
 
     def findElements(self, args):
         # 查找某些元素
@@ -94,24 +98,54 @@ class Base(object):
         except Exception as e:
             return False
 
-    def tap_position(self, x, y):
-        width = self.driver.get_window_size()['width']
-        print("width:",width)
-        height = self.driver.get_window_size()['height']
-        print("height",height)
-        self.driver.tap([x, y])
-
-    def scroll(self):
-        self.driver.scroll([75, 1024], [75, 0], 800)
-
-    def get_toast(self, contain):
+    def get_toast(self, message):
         """find toast by context"""
-        toast = ("xpath", ".//[contains(@text,'%s')]"%contain)
+        toast = ("xpath", ".//[contains(@text,'%s')]"%message)
         try:
-            t = WebDriverWait(self.driver, self.timeout, self.poll).until(EC.presence_of_element_located(toast))
-            return t
+            ele = WebDriverWait(self.driver, self.timeout, self.poll).until(EC.presence_of_element_located(toast))
+            # ele = WebDriverWait(self.driver, self.timeout, self.poll).until(EC.presence_of_element_located(("link text",message)))
+            print("toast found: %s"%ele)
+            return ele
         except Exception as e:
             return False
+
+    def getSize(self):
+        """get screen width and height"""
+        x = self.driver.get_window_size()['width']
+        y = self.driver.get_window_size()['height']
+        return (x, y)
+
+    # 屏幕向上滑动
+    def swipeUp(self,t):
+        l = self.getSize()
+        x1 = int(l[0] * 0.5)  # x坐标
+        y1 = int(l[1] * 0.75)  # 起始y坐标
+        y2 = int(l[1] * 0.25)  # 终点y坐标
+        self.driver.swipe(x1, y1, x1, y2, t)
+
+    # 屏幕向下滑动
+    def swipeDown(self,t):
+        l = self.getSize()
+        x1 = int(l[0] * 0.5)  # x坐标
+        y1 = int(l[1] * 0.25)  # 起始y坐标
+        y2 = int(l[1] * 0.75)  # 终点y坐标
+        self.driver.swipe(x1, y1, x1, y2, t)
+
+    # 屏幕向左滑动
+    def swipLeft(self, t):
+        l = self.getSize()
+        x1 = int(l[0] * 0.75)
+        y1 = int(l[1] * 0.5)
+        x2 = int(l[0] * 0.05)
+        self.driver.swipe(x1, y1, x2, y1, t)
+
+    # 屏幕向右滑动
+    def swipRight(self, t):
+        l = self.getSize()
+        x1 = int(l[0] * 0.05)
+        y1 = int(l[1] * 0.5)
+        x2 = int(l[0] * 0.75)
+        self.driver.swipe(x1, y1, x2, y1, t)
 
     def logout(self):
         "logout"

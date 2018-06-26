@@ -3,7 +3,7 @@
 Created on 2018.6.21
 @author: Administrator
 """
-import os
+import os,time
 from SafeEmail.common.base import Base
 from SafeEmail.common.device import DeviceConfig
 from SafeEmail.data.element import LoginEle
@@ -14,6 +14,12 @@ class Login(Base, LoginEle):
 
     log = Logger(os.path.basename(__file__))
     loginActivity = ".ui.activities.LoginActivity"     # login page activity
+
+    def swipLeft4(self):
+        for i in range(4):
+            print("left swip %d"%i)
+            self.swipLeft(500)
+        time.sleep(15)
 
     def input_user_psd(self, user, psd):
         self.log.debug_log("1. input email username")
@@ -45,21 +51,35 @@ class Login(Base, LoginEle):
         except:
             self.log.error_log("click_setup_email False!")
 
-    def login_email(self, user='liq01@qtec.cn', psd='Abc1234',type=2):
+    def login_email(self, user='liq01@qtec.cn', psd='Abc12345',type=2):
         # 第一次登录，必须是加密邮箱
         # 1. 输入邮箱账号和密码
         self.driver.wait_activity(self.loginActivity, 30, 1)
+        print("1.....")
         try:
             self.input_user_psd(user, psd)
+            print("2.....")
             # 2. 完成设置页
-            self.click_setup_email(type)
+            # self.click_setup_email(type)
+            print("3.....")
             # 3. 点击登录按钮
             self.log.debug_log("6. click login button")
+            # print("4.....")
+            time.sleep(20)
             self.click(self.login_btn)
         except:
             self.log.error_log("click login Failed!")
         self.log.debug_log("wait for at least 30 seconds for scan the QK code")
-        self.driver.wait_activity(self.loginActivity, 30, 1)
+
+        ele = self.get_toast("网络不可用,请检查网络状态")
+        print("toast",ele)
+
+    def login_result(self, res):
+        ele = self.get_toast(res)
+        if ele:
+            self.log.error_log("toast: 登录错误判断")
+        else:
+            return True
 
     def add_account(self, arr, entry="setting" ,flag=True):
         """添加账户，flag=True表示是加密账号，flag=False表示是普通账号"""
